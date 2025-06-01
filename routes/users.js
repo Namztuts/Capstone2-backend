@@ -5,12 +5,12 @@
 const jsonschema = require('jsonschema');
 
 const express = require('express');
-// const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
 const { BadRequestError } = require('../expressError');
 const User = require('../models/user');
 const { createToken } = require('../helpers/tokens');
 const userNewSchema = require('../schemas/userNew.json');
 const userUpdateSchema = require('../schemas/userUpdate.json');
+// const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth"); NOTE: for middleware
 
 const router = express.Router();
 
@@ -26,9 +26,8 @@ const router = express.Router();
  * Authorization required: admin
  **/
 
-// router.post('/', ensureAdmin, async function (req, res, next) {
+// router.post('/', ensureAdmin, async function (req, res, next) { NOTE: setup admin
 router.post('/', async function (req, res, next) {
-   //NOTE: probably won't use this route cause don't need admins? also would maybe move register route here instead??
    try {
       const validator = jsonschema.validate(req.body, userNewSchema);
       if (!validator.valid) {

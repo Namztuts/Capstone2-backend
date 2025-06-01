@@ -29,10 +29,17 @@ router.post('/', async function (req, res, next) {
       const validator = jsonschema.validate(req.body, productNewSchema);
       if (!validator.valid) {
          const errs = validator.errors.map((e) => e.stack);
+         console.error('Validation errors:', errs);
          throw new BadRequestError(errs);
       }
 
-      const product = await Product.create(req.body);
+      const newProduct = {
+         ...req.body,
+         image_url: req.body.imageUrl,
+         category_id: req.body.categoryID,
+      };
+
+      const product = await Product.create(newProduct);
       return res.status(201).json({ product });
    } catch (err) {
       return next(err);

@@ -8,10 +8,9 @@ const {
    BadRequestError,
    UnauthorizedError,
 } = require('../expressError');
-
 const { BCRYPT_WORK_FACTOR } = require('../config.js');
 
-/** Related functions for users. */
+//Related functions for users
 class User {
    /** authenticate user with username, password.
     *
@@ -202,7 +201,6 @@ class User {
       }
 
       //continue with getting and updating the fields
-      //NOTE: how is this updating username and email fields if it is not included here? Ask chatGPT
       const { setCols, values } = sqlForPartialUpdate(data, {
          firstName: 'first_name',
          lastName: 'last_name',

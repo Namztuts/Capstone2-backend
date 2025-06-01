@@ -4,7 +4,7 @@ const db = require('../db');
 const { BadRequestError, NotFoundError } = require('../expressError');
 const { sqlForPartialUpdate } = require('../helpers/sql');
 
-/** Related functions for carts. */
+//Related functions for carts
 class Cart {
    /** Create a cart (from data), update db, return new category data.
     *
@@ -123,7 +123,7 @@ class Cart {
       const result = await db.query(querySql, [...values, username]);
       const cart = result.rows[0];
 
-      if (!cart) throw new NotFoundError(`No cart: ${id}`);
+      if (!cart) throw new NotFoundError(`No cart: ${username}`);
 
       return cart;
    }

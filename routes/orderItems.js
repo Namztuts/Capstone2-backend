@@ -52,7 +52,6 @@ router.post('/', async function (req, res, next) {
 // router.post('/', ensureAdmin, async function (req, res, next) {
 //FIN:
 router.post('/bulk', async function (req, res, next) {
-   console.log('reaching bulk route');
    try {
       if (!Array.isArray(req.body)) {
          throw new BadRequestError('Expected an array of order items');
@@ -64,9 +63,7 @@ router.post('/bulk', async function (req, res, next) {
             throw new BadRequestError(errs);
          }
       }
-      console.log('route request', req.body);
       const addedItems = await OrderItem.addBulk(req.body);
-      console.log('route addedItems', addedItems);
       return res.status(201).json({ addedItems });
    } catch (err) {
       return next(err);

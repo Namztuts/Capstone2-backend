@@ -15,7 +15,7 @@
          "type": "number",
          "minimum": 0
       },
-      "image_url": {
+      "imageUrl": {
          "type": "string",
          "format": "uri"
       },
@@ -24,11 +24,11 @@
          "minimum": 0,
          "default": 0
       },
-      "category_id": {
+      "categoryID": {
          "type": ["integer", "null"],
          "minimum": 1
       }
    },
-   "required": ["name", "description", "price", "image_url", "category_id"],
+   "required": ["name", "description", "price", "imageUrl", "categoryID"],
    "additionalProperties": false
 }

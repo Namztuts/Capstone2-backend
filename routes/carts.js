@@ -35,6 +35,7 @@ router.post('/', async function (req, res, next) {
       const cart = await Cart.create(req.body);
       return res.status(201).json({ cart });
    } catch (err) {
+      console.error('POST /carts ERROR:', err);
       return next(err);
    }
 });
@@ -86,7 +87,7 @@ router.get('/:username', async function (req, res, next) {
  **/
 
 // router.patch('/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
-//TODO: can't update cart due to it depending on the username from users
+//FIN:
 router.patch('/:username', async function (req, res, next) {
    try {
       const validator = jsonschema.validate(req.body, cartNewSchema);

@@ -20,12 +20,12 @@ class Categories {
       const duplicateCheck = await db.query(
          `SELECT id
            FROM categories
-           WHERE id = $1`,
-         [id]
+           WHERE name = $1`,
+         [name]
       );
 
       if (duplicateCheck.rows[0])
-         throw new BadRequestError(`Duplicate category: ${id}`);
+         throw new BadRequestError(`Duplicate category: ${name}`);
 
       const result = await db.query(
          `INSERT INTO categories

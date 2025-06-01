@@ -5,7 +5,7 @@ const { BadRequestError, NotFoundError } = require('../expressError');
 const { sqlForPartialUpdate } = require('../helpers/sql');
 
 /** Related functions for cart items. */
-class CartItem {
+class OrderItem {
    /** Create a cart (from data), update db, return new category data.
     *
     * data should be { name }
@@ -189,4 +189,4 @@ class CartItem {
    }
 }
 
-module.exports = CartItem;
+module.exports = OrderItem;
