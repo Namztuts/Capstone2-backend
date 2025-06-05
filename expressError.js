@@ -18,7 +18,10 @@ class NotFoundError extends ExpressError {
    }
 }
 
-/** 401 UNAUTHORIZED error. */
+/* 401 UNAUTHORIZED error.
+ * This error is used when a request is made without valid authentication credentials
+ * (i.e., no token or invalid token).
+ */
 class UnauthorizedError extends ExpressError {
    constructor(message = 'Unauthorized') {
       super(message, 401);
@@ -32,9 +35,12 @@ class BadRequestError extends ExpressError {
    }
 }
 
-/** 403 BAD REQUEST error. */
+/* 403 BAD REQUEST error.
+ * This error should be used when the user is authenticated, but they don’t have permission to access the requested resource
+ * (i.e., an admin-only route for a non-admin).
+ */
 class ForbiddenError extends ExpressError {
-   constructor(message = 'Bad Request') {
+   constructor(message = 'Forbidden') {
       super(message, 403);
    }
 }

@@ -5,7 +5,7 @@
 const jsonschema = require('jsonschema');
 
 const express = require('express');
-// const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
+const { ensureLoggedIn } = require('../middleware/auth');
 const { BadRequestError } = require('../expressError');
 const Cart = require('../models/cart');
 const CartItem = require('../models/cartItem');
@@ -23,9 +23,9 @@ const router = express.Router();
  * Authorization required: admin
  **/
 
-// router.post('/', ensureAdmin, async function (req, res, next) {
-//FIN:
-router.post('/', async function (req, res, next) {
+router.post('/', ensureLoggedIn, async function (req, res, next) {
+   //TODO: testing if this works; throws an error but want it to prevent the message popping up saying 'added to cart'
+   // router.post('/', async function (req, res, next) {
    try {
       const validator = jsonschema.validate(req.body, cartItemNewSchema);
       if (!validator.valid) {

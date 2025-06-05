@@ -10,7 +10,7 @@ const User = require('../models/user');
 const { createToken } = require('../helpers/tokens');
 const userNewSchema = require('../schemas/userNew.json');
 const userUpdateSchema = require('../schemas/userUpdate.json');
-// const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth"); NOTE: for middleware
+const { ensureCorrectUserOrAdmin, ensureAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -25,9 +25,8 @@ const router = express.Router();
  *
  * Authorization required: admin
  **/
-
-// router.post('/', ensureAdmin, async function (req, res, next) { NOTE: setup admin
-router.post('/', async function (req, res, next) {
+router.post('/', ensureAdmin, async function (req, res, next) {
+   //FIN:
    try {
       const validator = jsonschema.validate(req.body, userNewSchema);
       if (!validator.valid) {
@@ -49,10 +48,9 @@ router.post('/', async function (req, res, next) {
  *
  * Authorization required: admin
  **/
-
-// router.get('/', ensureAdmin, async function (req, res, next) {
-router.get('/', async function (req, res, next) {
-   //FIN: route works
+router.get('/', ensureAdmin, async function (req, res, next) {
+   // router.get('/', async function (req, res, next) {
+   //FIN:
    try {
       const users = await User.findAll();
       return res.json({ users });
@@ -68,18 +66,19 @@ router.get('/', async function (req, res, next) {
  *
  * Authorization required: admin or same user-as-:username
  **/
-
-// router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
-router.get('/:username', async function (req, res, next) {
-   //TODO: add middleware to ensure that the correct person is accessing
-   //FIN: route works
-   try {
-      const user = await User.get(req.params.username);
-      return res.json({ user });
-   } catch (err) {
-      return next(err);
+router.get(
+   '/:username',
+   ensureCorrectUserOrAdmin,
+   async function (req, res, next) {
+      //FIN: seems to work | can't get user2 information with user1 token
+      try {
+         const user = await User.get(req.params.username);
+         return res.json({ user });
+      } catch (err) {
+         return next(err);
+      }
    }
-});
+);
 
 /** PATCH /[username] { user } => { user }
  *
@@ -90,40 +89,44 @@ router.get('/:username', async function (req, res, next) {
  *
  * Authorization required: admin or same-user-as-:username
  **/
+router.patch(
+   '/:username',
+   ensureCorrectUserOrAdmin,
+   async function (req, res, next) {
+      //FIN: works as intended
+      try {
+         const validator = jsonschema.validate(req.body, userUpdateSchema);
+         if (!validator.valid) {
+            const errs = validator.errors.map((e) => e.stack);
+            throw new BadRequestError(errs);
+         }
 
-// router.patch('/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
-//FIN: works as intended
-router.patch('/:username', async function (req, res, next) {
-   try {
-      const validator = jsonschema.validate(req.body, userUpdateSchema);
-      if (!validator.valid) {
-         const errs = validator.errors.map((e) => e.stack);
-         throw new BadRequestError(errs);
+         const user = await User.update(req.params.username, req.body);
+         const token = createToken(user); //issue a new token
+
+         return res.json({ user, token });
+      } catch (err) {
+         return next(err);
       }
-
-      const user = await User.update(req.params.username, req.body);
-      const token = createToken(user); //issue a new token
-
-      return res.json({ user, token });
-   } catch (err) {
-      return next(err);
    }
-});
+);
 
 /** DELETE /[username]  =>  { deleted: username }
  *
  * Authorization required: admin or same-user-as-:username
  **/
-
-// router.delete('/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
-//FIN: works
-router.delete('/:username', async function (req, res, next) {
-   try {
-      await User.remove(req.params.username);
-      return res.json({ deleted: req.params.username });
-   } catch (err) {
-      return next(err);
+router.delete(
+   '/:username',
+   ensureCorrectUserOrAdmin,
+   async function (req, res, next) {
+      //FIN: works
+      try {
+         await User.remove(req.params.username);
+         return res.json({ deleted: req.params.username });
+      } catch (err) {
+         return next(err);
+      }
    }
-});
+);
 
 module.exports = router;

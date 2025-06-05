@@ -3,6 +3,19 @@
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const { BCRYPT_WORK_FACTOR } = require('../config');
+const { createToken } = require('../helpers/tokens');
+
+async function createAdminToken() {
+   // Create an admin token for testing
+   const admin = { username: 'admin', isAdmin: true };
+   return createToken(admin);
+}
+
+async function createUserToken() {
+   // Create a non-admin user token for testing
+   const user = { username: 'testuser', isAdmin: false };
+   return createToken(user);
+}
 
 const testUsers = [
    {
@@ -147,4 +160,6 @@ module.exports = {
    testProducts,
    testCategories,
    testCarts,
+   createAdminToken,
+   createUserToken,
 };
