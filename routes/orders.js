@@ -1,6 +1,6 @@
 'use strict';
 
-/** Routes for carts. */
+/** Routes for orders. */
 
 const jsonschema = require('jsonschema');
 
